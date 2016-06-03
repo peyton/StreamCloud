@@ -12,7 +12,7 @@
 #import "StreamCloudStyles.h"
 #import "AFNetworking.h"
 #import "TrackCellView.h"
-//#import "AppleMediaKeyController.h"
+#import "AppleMediaKeyController.h"
 #import "SoundCloudAPIClient.h"
 #import <HockeySDK/HockeySDK.h>
 #import "AFNetworking.h"
@@ -47,6 +47,12 @@ NSString *const PreviousShortcutPreferenceKey = @"PreviousShortcut";
                    redirectURL:[NSURL URLWithString:@"streamcloud://soundcloud/callback"]];
 #endif
     
+    
+    AppleMediaKeyController *mkc = [AppleMediaKeyController sharedController];
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(spaceBarPressed:) name:MediaKeyPlayPauseNotification object:mkc];
+    [nc addObserver:self selector:@selector(leftKeyPressed:) name:MediaKeyPreviousNotification object:mkc];
+    [nc addObserver:self selector:@selector(rightKeyPressed:) name:MediaKeyNextNotification object:mkc];
     
     [[NSAppleEventManager sharedAppleEventManager] setEventHandler:self
                                                        andSelector:@selector(handleURLEvent:withReplyEvent:)
